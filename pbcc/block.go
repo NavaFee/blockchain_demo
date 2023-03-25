@@ -4,6 +4,8 @@ import (
 	"blockchain/utils"
 	"bytes"
 	"crypto/sha256"
+	"encoding/gob"
+	"log"
 	"strconv"
 	"time"
 )
@@ -59,4 +61,31 @@ func NewBlock(data string, prevBlockHash []byte, height int64) *Block {
 // 创建创世区块
 func CreateGenesisBlock(data string) *Block {
 	return NewBlock(data, make([]byte, 32), 0)
+}
+
+// 将区块序列化，得到一个字节数组 ---- 区块的行为
+func (block *Block) Serialize() []byte {
+	//创建一个Buffer
+	var result bytes.Buffer
+	//创建一个编码器  NewEncoder返回一个将编码后数据写入w的*Encoder。
+	encoder := gob.NewEncoder(&result)
+	//编码----> 打包  Encode方法将e编码后发送，并且会保证所有的类型信息都先发送。
+	err := encoder.Encode(block)
+	if err != nil {
+		log.Panic(err)
+	}
+	return result.Bytes()
+}
+
+// 反序列化，得到以个区块
+func DeserializeBlock(blockBytes []byte) *Block {
+	var block Block
+	var reader = bytes.NewReader(blockBytes)
+	//创建一个解码器
+	decoder := gob.NewDecoder(reader)
+	err := decoder.Decode(&block)
+	if err != nil {
+		log.Panic(err)
+	}
+	return &block
 }
