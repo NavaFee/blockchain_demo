@@ -21,7 +21,7 @@ func (cli *CLI) Run() {
 	printChainCmd := flag.NewFlagSet("printchain", flag.ExitOnError)
 	createBlockChainCmd := flag.NewFlagSet("createblockchain", flag.ExitOnError)
 	//设置标签后的参数
-	flagAddBlockData := addBlockCmd.String("data", "helloworld", "交易数据")
+	//	flagAddBlockData := addBlockCmd.String("data", "helloworld", "交易数据")
 	flagCreateBlockChainData := createBlockChainCmd.String("data", "Genesis block data", "创世区块交易数据")
 
 	//解析
@@ -36,7 +36,7 @@ func (cli *CLI) Run() {
 		if err != nil {
 			log.Panic(err)
 		}
-	case "createblockchaincmd":
+	case "createblockchain":
 		err := createBlockChainCmd.Parse(os.Args[2:])
 		if err != nil {
 			log.Panic(err)
@@ -46,13 +46,13 @@ func (cli *CLI) Run() {
 		printUsage()
 		os.Exit(1)
 	}
-	if addBlockCmd.Parsed() {
-		if *flagAddBlockData == "" {
-			printUsage()
-			os.Exit(1)
-		}
-		cli.addBlock(*flagAddBlockData)
-	}
+	//if addBlockCmd.Parsed() {
+	//	if *flagAddBlockData == "" {
+	//		printUsage()
+	//		os.Exit(1)
+	//	}
+	//	cli.addBlock(*flagAddBlockData)
+	//}
 	if createBlockChainCmd.Parsed() {
 		if *flagCreateBlockChainData == "" {
 			printUsage()
